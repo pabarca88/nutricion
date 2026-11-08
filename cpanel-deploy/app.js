@@ -55,7 +55,15 @@ const staticFile = async (pathname, response) => {
 };
 
 http.createServer(async (request, response) => {
-  const { pathname } = new URL(request.url, `http://${request.headers.host}`);
+  const rawPathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+  // Passenger conserva el prefijo de la URL configurada en cPanel (por ejemplo, /nutricion).
+  // Se puede reemplazar mediante APP_BASE_PATH si la instalación usa otro subdirectorio.
+  const basePath = String(process.env.APP_BASE_PATH || "/nutricion").replace(/\/$/, "");
+  const pathname = rawPathname === basePath
+    ? "/"
+    : rawPathname.startsWith(`${basePath}/`)
+      ? rawPathname.slice(basePath.length)
+      : rawPathname;
   try {
     if (request.method === "GET" && pathname === "/health") return json(response, 200, { status: "ok", app: "NutriPediátrica", node: process.version, database: pool ? "configured" : "demo" });
     if (request.method === "GET" && pathname === "/api/patients") return json(response, 200, await patients());
