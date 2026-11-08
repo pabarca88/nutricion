@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NutriPediátrica</title><link rel="stylesheet" href="nutri.css"></head>
+<body>
+  <aside><div class="brand"><span>✦</span> nutri<i>pediátrica</i></div><div class="profile"><b>María Soto</b><small>Nutricionista</small></div><nav><a class="active">▦ Resumen</a><a>♙ Pacientes</a><a>☷ Planes nutricionales</a><a>◉ Alimentos y recetas</a><a>✧ Plantillas clínicas</a></nav><footer>◌ ¿Necesitas ayuda?<small>Guía clínica y soporte</small></footer></aside>
+  <main><header><span>Inicio / <b>Resumen</b></span><span>◌ <b>MS</b></span></header><section class="content">
+    <div class="welcome"><div><p>Hola, María 👋</p><h1>Tu consulta, más simple.</h1><small>Administra tus planes y acompaña a tus pacientes.</small></div><button id="newPatient">＋ Nuevo paciente</button></div>
+    <div class="stats"><article><span>♙</span><div><small>Pacientes activos</small><b id="patientCount">—</b><em>Datos de tu consulta</em></div></article><article><span class="purple">☷</span><div><small>Planes este mes</small><b>0</b><em>Disponible en Sprint 2</em></div></article><article><span class="blue">▣</span><div><small>Estado del sistema</small><b id="mode">—</b><em>Conexión clínica</em></div></article></div>
+    <section class="panel"><div class="title"><div><small>PACIENTES</small><h2>Pacientes recientes</h2></div><button class="plain" id="refresh">Actualizar</button></div><div id="patients" class="patients">Cargando pacientes…</div></section>
+    <section class="panel roadmap"><small>SPRINT 1 · BASE CLÍNICA</small><h2>Registro de pacientes listo para conectar</h2><p>Esta versión funciona con datos de demostración hasta que se ingresen las credenciales MySQL de cPanel.</p><div><span>✓ Servidor Node.js</span><span>✓ API de pacientes</span><span>○ MySQL pendiente</span><span>○ Autenticación pendiente</span></div></section>
+    <p class="note">Los datos clínicos y los planes nutricionales requieren revisión profesional antes de su entrega.</p>
+  </section></main>
+  <dialog id="modal"><form method="dialog" id="patientForm"><button class="close" value="cancel">×</button><small>NUEVO PACIENTE</small><h2>Crear ficha clínica</h2><label>Nombre completo<input name="full_name" required placeholder="Nombre y apellidos"></label><div class="two"><label>Fecha de nacimiento<input name="birth_date" type="date"></label><label>Sexo<select name="sex"><option value="">Seleccionar</option><option>Femenino</option><option>Masculino</option><option>Otro / no especifica</option></select></label></div><div class="two"><label>Peso (kg)<input name="weight_kg" type="number" step=".1"></label><label>Talla (cm)<input name="height_cm" type="number" step=".1"></label></div><button class="save">Guardar ficha</button><p id="formMessage"></p></form></dialog>
+  <script src="nutri.js"></script>
+</body></html>
