@@ -40,6 +40,7 @@ yarn-error.log*
 /.codex/
 /outputs/
 /work/
+/nutripediatrica-cpanel-test.zip
 
 # OS metadata
 .DS_Store

@@ -1,0 +1,13 @@
+{
+  "name": "nutripediatrica-cpanel-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prueba técnica para cPanel Node.js / Passenger.",
+  "main": "app.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
