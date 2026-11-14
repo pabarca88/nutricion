@@ -29,16 +29,36 @@ const patients = async () => {
   const [rows] = await pool.query("SELECT id, full_name, birth_date, sex, weight_kg, height_cm, status FROM patients WHERE archived_at IS NULL ORDER BY created_at DESC");
   return { source: "mysql", data: rows };
 };
+const patient = async (id) => {
+  if (!pool) return demoPatients.find((item) => item.id === id) || null;
+  const [rows] = await pool.execute("SELECT id, full_name, birth_date, sex, weight_kg, height_cm, status, intake_data FROM patients WHERE id = ? AND archived_at IS NULL", [id]);
+  if (!rows[0]) return null;
+  const item = rows[0];
+  return { ...item, intake_data: typeof item.intake_data === "string" ? JSON.parse(item.intake_data) : item.intake_data };
+};
 const createPatient = async (input) => {
   const fullName = String(input.full_name || "").trim();
   if (!fullName) throw new Error("El nombre del paciente es obligatorio.");
   const record = { full_name: fullName, birth_date: input.birth_date || null, sex: input.sex || null, weight_kg: Number(input.weight_kg) || null, height_cm: Number(input.height_cm) || null, status: "Borrador" };
+  const existingId = Number(input.intake_data?.patient_id || 0);
   if (!pool) {
+    if (existingId) {
+      const index = demoPatients.findIndex((item) => item.id === existingId);
+      if (index === -1) throw new Error("Paciente no encontrado.");
+      demoPatients[index] = { ...demoPatients[index], ...record, intake_data: input.intake_data };
+      return demoPatients[index];
+    }
     const patient = { id: Date.now(), ...record };
     demoPatients.unshift(patient);
     return patient;
   }
-  const [result] = await pool.execute("INSERT INTO patients (full_name, birth_date, sex, weight_kg, height_cm, status) VALUES (?, ?, ?, ?, ?, ?)", [record.full_name, record.birth_date, record.sex, record.weight_kg, record.height_cm, record.status]);
+  const intakeData = input.intake_data ? JSON.stringify(input.intake_data) : null;
+  if (existingId) {
+    const [result] = await pool.execute("UPDATE patients SET full_name = ?, birth_date = ?, sex = ?, weight_kg = ?, height_cm = ?, intake_data = ? WHERE id = ? AND archived_at IS NULL", [record.full_name, record.birth_date, record.sex, record.weight_kg, record.height_cm, intakeData, existingId]);
+    if (!result.affectedRows) throw new Error("Paciente no encontrado.");
+    return { id: existingId, ...record };
+  }
+  const [result] = await pool.execute("INSERT INTO patients (full_name, birth_date, sex, weight_kg, height_cm, status, intake_data) VALUES (?, ?, ?, ?, ?, ?, ?)", [record.full_name, record.birth_date, record.sex, record.weight_kg, record.height_cm, record.status, intakeData]);
   return { id: result.insertId, ...record };
 };
 const types = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml", ".json": "application/json; charset=utf-8" };
@@ -67,6 +87,10 @@ http.createServer(async (request, response) => {
   try {
     if (request.method === "GET" && pathname === "/health") return json(response, 200, { status: "ok", app: "NutriPediátrica", node: process.version, database: pool ? "configured" : "demo" });
     if (request.method === "GET" && pathname === "/api/patients") return json(response, 200, await patients());
+    if (request.method === "GET" && /^\/api\/patients\/\d+$/.test(pathname)) {
+      const item = await patient(Number(pathname.split("/").pop()));
+      return item ? json(response, 200, { data: item }) : json(response, 404, { error: "Paciente no encontrado." });
+    }
     if (request.method === "POST" && pathname === "/api/patients") return json(response, 201, { data: await createPatient(await body(request)) });
     if (request.method === "GET" && await staticFile(pathname, response)) return;
     response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });

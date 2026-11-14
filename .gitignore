@@ -1,5 +1,6 @@
 # Dependencies
 /node_modules/
+cpanel-deploy/node_modules/
 /.pnp
 .pnp.*
 # Keep authored Yarn tooling if the project adopts Yarn.
@@ -28,6 +29,8 @@ yarn-error.log*
 
 # Local environment and keys
 .env*
+!.env.local.example
+!cpanel-deploy/.env.example
 .dev.vars*
 *.pem
 

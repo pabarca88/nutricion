@@ -12,6 +12,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
     "mysql2": "^3.15.3"
   }
 }
