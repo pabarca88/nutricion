@@ -33,7 +33,7 @@ cpanel-deploy/.env.example           Variables de entorno de ejemplo
 cpanel-deploy/INSTALACION.md         Guía humana de instalación
 ```
 
-No reemplazar esta aplicación por el starter de Vite/Vinext ubicado fuera de `cpanel-deploy/` sin autorización explícita.
+La aplicación está contenida en `cpanel-deploy/`; no hay otro runtime activo en la raíz del repositorio.
 
 ## Instalación desde cero
 
