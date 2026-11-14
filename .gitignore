@@ -1,6 +1,11 @@
 node_modules/
+node_modules.incomplete/
 .env
 .env.*
 !.env.example
 !cpanel-deploy/.env.example
+.next/
+.vinext/
+.wrangler/
+dist/
 .DS_Store
