@@ -5,6 +5,7 @@ import { URL } from "node:url";
 import mysql from "mysql2/promise";
 import { HttpError } from "./errors.js";
 import { createPlanService } from "./plans.js";
+import { planPdf } from "./plan-pdf.js";
 import { createCatalogService } from "./catalog.js";
 import { createMilestoneService } from "./milestones.js";
 
@@ -145,6 +146,18 @@ http.createServer(async (request, response) => {
     const patientPlans = pathname.match(/^\/api\/patients\/(\d+)\/plans$/);
     if (patientPlans && request.method === "GET") return json(response, 200, { data: await plans.list(Number(patientPlans[1])) });
     if (patientPlans && request.method === "POST") return json(response, 201, { data: await plans.create(Number(patientPlans[1]), await body(request)) });
+    const planPdfRoute = pathname.match(/^\/api\/plans\/(\d+)\/pdf$/);
+    if (planPdfRoute && request.method === "GET") {
+      const plan = await plans.get(Number(planPdfRoute[1]));
+      if (!plan) return json(response, 404, { error: "Plan no encontrado." });
+      const owner = await patient(plan.patient_id);
+      if (!owner) return json(response, 404, { error: "Paciente no encontrado." });
+      const pdf = await planPdf(plan, owner);
+      const base = `Plan_${owner.full_name}_v${plan.version}`;
+      const ascii = base.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9_.-]+/g, "_").replace(/_+/g, "_");
+      response.writeHead(200, { "Content-Type": "application/pdf", "Content-Length": pdf.length, "Cache-Control": "no-store", "Content-Disposition": `attachment; filename="${ascii}.pdf"; filename*=UTF-8''${encodeURIComponent(base)}.pdf` });
+      return response.end(pdf);
+    }
     const planRoute = pathname.match(/^\/api\/plans\/(\d+)(?:\/(approve|discard))?$/);
     if (planRoute) {
       const planId = Number(planRoute[1]);

@@ -51,10 +51,16 @@ function cleanValue(key, value) {
   if (Array.isArray(value)) {
     if (value.length > 60) throw bad(`El campo ${key} tiene demasiados elementos.`);
     return value
-      .map((item) => (item && typeof item === "object"
-        ? { food: optionalText(item.food, "El alimento", 80), type: optionalText(item.type, "El tipo", 40) || "", note: optionalText(item.note ?? item.reaction, "La observación", 200) || "" }
-        : optionalText(item, `Un valor de ${key}`, 200)))
-      .filter((item) => (item && typeof item === "object" ? item.food : item));
+      .map((item) => {
+        if (!item || typeof item !== "object") return optionalText(item, `Un valor de ${key}`, 200);
+        // Medicamento: { name, dose, frequency, reason }
+        if ("name" in item && !("food" in item)) {
+          return { name: optionalText(item.name, "El fármaco", 120), dose: optionalText(item.dose, "La dosis", 60) || "", frequency: optionalText(item.frequency, "La frecuencia", 60) || "", reason: optionalText(item.reason, "El motivo", 200) || "" };
+        }
+        // Alimento: { food, type, note }
+        return { food: optionalText(item.food, "El alimento", 80), type: optionalText(item.type, "El tipo", 40) || "", note: optionalText(item.note ?? item.reaction, "La observación", 200) || "" };
+      })
+      .filter((item) => (item && typeof item === "object" ? item.food || item.name : item));
   }
   if (typeof value === "object") throw bad(`El campo ${key} no tiene un formato válido.`);
   return optionalText(value, `El campo ${key}`, 5000) || "";

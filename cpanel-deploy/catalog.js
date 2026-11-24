@@ -156,7 +156,7 @@ export function mealKey(name) {
 }
 const fitsMeal = (food, key) => !key || !food.meal_types || splitList(food.meal_types).map(normalize).includes(key);
 
-const FRACTIONS = [[0.125, "1/8"], [1 / 6, "1/6"], [0.25, "1/4"], [1 / 3, "1/3"], [0.5, "1/2"], [2 / 3, "2/3"], [0.75, "3/4"]];
+const FRACTIONS = [[0.125, "1/8"], [1 / 6, "1/6"], [0.25, "1/4"], [1 / 3, "1/3"], [0.375, "3/8"], [0.5, "1/2"], [0.625, "5/8"], [2 / 3, "2/3"], [0.75, "3/4"], [0.875, "7/8"]];
 function formatQty(q) {
   const whole = Math.floor(q + 1e-9);
   const rest = q - whole;

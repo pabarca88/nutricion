@@ -235,9 +235,10 @@
         <div class="plan-buttons">
           ${plan.id ? `<button type="button" class="danger" data-action="discard">Descartar borrador</button>` : ""}
           <button type="button" class="secondary" data-action="save">Guardar borrador</button>
+          <button type="button" class="secondary" data-action="download-pdf">Guardar y descargar PDF</button>
           <button type="button" class="save" data-action="approve">Aprobar plan</button>
         </div>
-      </div>` : `<div class="plan-actions"><div class="plan-buttons"><button type="button" class="save" data-action="copy">Crear nueva versión a partir de este plan</button></div></div>`}
+      </div>` : `<div class="plan-actions"><div class="plan-buttons"><button type="button" class="secondary" data-action="download-pdf">Descargar PDF</button><button type="button" class="save" data-action="copy">Crear nueva versión a partir de este plan</button></div></div>`}
       <p id="planMessage" role="status" class="${state.messageType}">${esc(state.message)}</p>
       <p class="plan-disclaimer">Los valores propuestos por el sistema son estimaciones provisionales. La nutricionista responsable debe validar requerimientos, curvas de crecimiento, diagnóstico, porciones e indicaciones antes de aprobar y entregar el plan.</p>
     </form>`;
@@ -246,7 +247,8 @@
   function render() {
     const data = patientData(state.patient);
     const age = patientAge(data.birth_date);
-    const summary = [age !== null ? `${age} años` : null, data.sex || null, data.weight_kg ? `${data.weight_kg} kg` : null, data.height_cm ? `${data.height_cm} cm` : null].filter(Boolean);
+    const bmi = bmiValue(data.weight_kg, data.height_cm);
+    const summary = [age !== null ? `${age} años` : null, data.sex || null, data.weight_kg ? `${fmtMeasure(data.weight_kg)} kg` : null, data.height_cm ? `${fmtMeasure(data.height_cm)} cm` : null, bmi ? `IMC ${fmtMeasure(bmi)} kg/m²` : null].filter(Boolean);
     planBody.innerHTML = `
       <button class="close" type="button" data-action="close" aria-label="Cerrar planes">×</button>
       <small class="eyebrow">PLANES DE ALIMENTACIÓN</small>
@@ -278,20 +280,76 @@
     </fieldset>`;
   }
 
+  // Familias por macronutriente principal (agrupación habitual de los grupos de intercambio).
+  const MACRO_FAMILIES = [
+    { key: "carbs", title: "Carbohidratos", hint: "Cereales, verduras, frutas y azúcares", codes: ["cereales", "verduras", "frutas", "azucares"] },
+    { key: "protein", title: "Proteínas", hint: "Carnes, pescados, huevos, lácteos y leguminosas", codes: ["proteinas", "lacteos", "leguminosas"] },
+    { key: "fat", title: "Grasas", hint: "Aceites y alimentos ricos en lípidos", codes: ["grasas", "lipidos"] },
+  ];
+  const familyOf = (code) => MACRO_FAMILIES.find((f) => f.codes.includes(code))?.key || "other";
+
+  // Medidas caseras: "1/2 taza" × 3 porciones → "1 1/2 tazas" (misma regla que el servidor, catalog.js).
+  const FRACTIONS = [[0.125, "1/8"], [1 / 6, "1/6"], [0.25, "1/4"], [1 / 3, "1/3"], [0.375, "3/8"], [0.5, "1/2"], [0.625, "5/8"], [2 / 3, "2/3"], [0.75, "3/4"], [0.875, "7/8"]];
+  const PLURALS = { taza: "tazas", unidad: "unidades", rebanada: "rebanadas", cucharadita: "cucharaditas", cucharada: "cucharadas", pote: "potes", lamina: "láminas", mitad: "mitades", chica: "chicas", mediana: "medianas", grande: "grandes" };
+  function formatQty(q) {
+    const whole = Math.floor(q + 1e-9);
+    const rest = q - whole;
+    if (rest < 0.02) return String(whole);
+    const fraction = FRACTIONS.find(([value]) => Math.abs(value - rest) < 0.02);
+    if (fraction) return whole ? `${whole} ${fraction[1]}` : fraction[1];
+    return (Math.round(q * 10) / 10).toLocaleString("es-CL");
+  }
+  function amountText(label, portions) {
+    const text = String(label || "").trim();
+    const match = text.match(/^(\d+)\/(\d+)\s+(.*)$/) || text.match(/^(\d+(?:[.,]\d+)?)\s+(.*)$/);
+    if (!match) return portions === 1 ? text : `${formatQty(portions)} × ${text}`;
+    const base = match.length === 4 ? Number(match[1]) / Number(match[2]) : Number(match[1].replace(",", "."));
+    let rest = match.length === 4 ? match[3] : match[2];
+    const qty = base * portions;
+    if (Math.abs(portions - 1) > 1e-9) rest = rest.replace(/\s*\([^)]*\)/g, "");
+    if (qty > 1 + 1e-9) rest = rest.split(" ").map((word, i) => (i < 2 && PLURALS[normalizeFood(word)] ? PLURALS[normalizeFood(word)] : word)).join(" ");
+    return `${formatQty(qty)} ${rest}`;
+  }
+  // Alimento de referencia del grupo para expresar porciones en tazas o cucharadas (prefiere los preferidos).
+  function measureFood(group) {
+    const list = [...(group.suggestions || [])].sort((a, b) => Number(b.preferred) - Number(a.preferred));
+    return list.find((food) => /taza|cuchar/i.test(food.portion_label)) || list[0] || null;
+  }
+  const lowerFirst = (text) => String(text || "").charAt(0).toLowerCase() + String(text || "").slice(1);
+  const household = (group, portions) => {
+    if (!portions) return "—";
+    const food = measureFood(group);
+    return food ? amountText(food.portion_label, portions) : `${fmt1(portions)} porc.`;
+  };
+
   function portionTable(pp, editable) {
     const visible = pp.groups.filter((g) => editable || g.daily > 0);
+    const families = [...MACRO_FAMILIES, { key: "other", title: "Otros", hint: "", codes: [] }]
+      .map((family) => ({ ...family, groups: visible.filter((g) => familyOf(g.code) === family.key) }))
+      .filter((family) => family.groups.length);
+    const columns = pp.meals.length + 3;
+    const groupRow = (g) => {
+      const gi = pp.groups.indexOf(g);
+      const ref = measureFood(g);
+      return `<tr class="group-row family-${familyOf(g.code)}" data-group-index="${gi}">
+        <td class="group-cell"><b>${esc(g.name)}</b><small>${ref ? `1 porción = ${esc(ref.portion_label)} de ${esc(lowerFirst(ref.name))}` : "Sin alimento de referencia"} · ${fmt1(g.ref.kcal)} kcal${g.min || g.max ? ` · regla ${fmt1(g.min)}–${fmt1(g.max)}` : ""}</small></td>
+        ${pp.meals.map((_, mi) => `<td class="meal-cell">${editable
+          ? `<input type="number" min="0" max="30" step="0.5" data-portion="${gi}:${mi}" value="${g.per_meal[mi] ?? 0}" aria-label="${esc(g.name)} en ${esc(pp.meals[mi])} (porciones)"><span class="measure" data-measure="${gi}:${mi}">${esc(household(g, g.per_meal[mi]))}</span>`
+          : `<span class="measure strong">${esc(household(g, g.per_meal[mi]))}</span>${g.per_meal[mi] ? `<small>${fmt1(g.per_meal[mi])} porc.</small>` : ""}`}</td>`).join("")}
+        <td class="total-cell"><span class="measure strong" data-daily-measure="${gi}">${esc(household(g, g.daily))}</span><small data-daily="${gi}">${fmt1(g.daily)} porc.</small></td>
+        <td class="kcal-cell" data-kcal="${gi}">${fmt1(g.daily * g.ref.kcal)}</td>
+      </tr>`;
+    };
     return `${pp.warnings?.length ? `<ul class="portion-warnings">${pp.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}
       <p class="calc-variables">${esc(pp.method || "")}${pp.rule_range ? ` · Reglas aplicadas: ${esc(pp.rule_range)}` : " · Sin reglas por edad"}${pp.generated_at ? ` · Generada ${esc(formatDateTime(pp.generated_at))}` : ""}</p>
-      <div class="table-scroll"><table class="portion-table">
-        <thead><tr><th>Grupo</th>${pp.meals.map((meal) => `<th>${esc(meal)}</th>`).join("")}<th>Total día</th><th>kcal</th></tr></thead>
-        <tbody>${visible.map((g) => {
-          const gi = pp.groups.indexOf(g);
-          return `<tr data-group-index="${gi}">
-          <td><b>${esc(g.name)}</b><small>1 porción: ${fmt1(g.ref.kcal)} kcal · P ${fmt1(g.ref.protein_g)} · G ${fmt1(g.ref.fat_g)} · C ${fmt1(g.ref.carbs_g)}${g.min || g.max ? ` · regla ${fmt1(g.min)}–${fmt1(g.max)}` : ""}</small></td>
-          ${pp.meals.map((_, mi) => `<td><input type="number" min="0" max="30" step="0.5" data-portion="${gi}:${mi}" value="${g.per_meal[mi] ?? 0}" aria-label="${esc(g.name)} en ${esc(pp.meals[mi])}"></td>`).join("")}
-          <td class="portion-daily" data-daily="${gi}">${fmt1(g.daily)}</td><td data-kcal="${gi}">${fmt1(g.daily * g.ref.kcal)}</td></tr>`;
-        }).join("")}</tbody>
+      <div class="table-scroll"><table class="portion-table pretty">
+        <thead><tr><th class="group-head">Grupo y medida de referencia</th>${pp.meals.map((meal) => `<th>${esc(meal)}</th>`).join("")}<th>Total día</th><th>kcal</th></tr></thead>
+        ${families.map((family) => `<tbody class="family family-${family.key}">
+          <tr class="family-row"><th colspan="${columns}"><span class="family-dot"></span>${esc(family.title)}${family.hint ? `<small>${esc(family.hint)}</small>` : ""}</th></tr>
+          ${family.groups.map(groupRow).join("")}
+        </tbody>`).join("")}
       </table></div>
+      <p class="calc-variables">Medidas caseras del alimento de referencia de cada grupo${editable ? "; los números son porciones de intercambio (puedes editarlos)" : ""}. Se puede reemplazar por otro alimento del mismo grupo en la misma cantidad de porciones.</p>
       <div class="portion-totals" id="portionTotals"></div>
       ${examplesBlock(pp, editable)}
       <details class="portion-foods"><summary>Alimentos sugeridos por grupo (sin alergias ni intolerancias; omite rechazados; ★ preferidos)</summary>
@@ -351,8 +409,14 @@
     pp.groups.forEach((g, gi) => {
       const daily = planBody.querySelector(`[data-daily="${gi}"]`);
       const kcal = planBody.querySelector(`[data-kcal="${gi}"]`);
-      if (daily) daily.textContent = fmt1(g.daily);
+      if (daily) daily.textContent = `${fmt1(g.daily)} porc.`;
       if (kcal) kcal.textContent = fmt1(g.daily * g.ref.kcal);
+      const dailyMeasure = planBody.querySelector(`[data-daily-measure="${gi}"]`);
+      if (dailyMeasure) dailyMeasure.textContent = household(g, g.daily);
+      g.per_meal.forEach((portions, mi) => {
+        const cell = planBody.querySelector(`[data-measure="${gi}:${mi}"]`);
+        if (cell) cell.textContent = household(g, portions);
+      });
     });
     box.innerHTML = MACRO_KEYS.map((key) => {
       const total = pp.totals[key];
@@ -559,6 +623,21 @@
       setMessage("Plan aprobado. Es ahora el plan vigente del paciente.", "ok");
       render();
     },
+    // PDF del plan guardado; un borrador se guarda antes para que el PDF refleje lo que se ve.
+    async "download-pdf"() {
+      let id = state.current.id;
+      if (state.current.status === "Borrador") {
+        id = (await save()).id;
+        setMessage("Borrador guardado. Descargando PDF (marcado como borrador)…", "info");
+        render();
+      }
+      const link = document.createElement("a");
+      link.href = `api/plans/${id}/pdf`;
+      link.download = "";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    },
     async discard() {
       if (!confirm("¿Descartar este borrador? Dejará de aparecer en el historial.")) return;
       await api(`api/plans/${state.current.id}/discard`, { method: "POST" });
@@ -578,7 +657,7 @@
   planBody.addEventListener("click", async (event) => {
     const button = event.target.closest("[data-action]");
     if (!button || !actions[button.dataset.action]) return;
-    const busy = ["save", "approve", "discard"].includes(button.dataset.action);
+    const busy = ["save", "approve", "discard", "download-pdf"].includes(button.dataset.action);
     if (busy) planBody.querySelectorAll("button").forEach((item) => { item.disabled = true; });
     try {
       await actions[button.dataset.action](button);

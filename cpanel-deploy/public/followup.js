@@ -1,6 +1,6 @@
 // Seguimiento clínico por hitos. La ficha inicial es la versión base (editable); cada hito registra
 // mediciones, la evolución, los datos propios de la atención y solo los datos de la ficha que cambiaron.
-// Depende de nutri.js ($, esc, patients, load, sections, field, readFoodList, renderFoodLists, addFood, fillForm)
+// Depende de nutri.js ($, esc, patients, load, sections, field, readFoodList, renderFoodLists, addFood, readMedList, renderMedLists, addMed, removeMed, medText, fillForm)
 // y de requirements.js (ageInYears).
 (() => {
   const modal = $("#followModal");
@@ -65,12 +65,14 @@
   function canonical(key, value) {
     const type = FIELDS[key]?.type;
     if (type === "foodlist") return JSON.stringify(readFoodList(value).map((i) => ({ food: i.food.trim(), type: i.type || "", note: i.note || "" })));
+    if (type === "medlist") return JSON.stringify(readMedList(value).map((i) => ({ name: i.name.trim(), dose: i.dose.trim(), frequency: i.frequency.trim(), reason: i.reason.trim() })));
     if (type === "multi") return JSON.stringify((Array.isArray(value) ? value : value ? [value] : []).map(String).sort());
     return String(value ?? "").trim();
   }
   function display(key, value) {
     const type = FIELDS[key]?.type;
     if (type === "foodlist") return readFoodList(value).map((i) => [i.food, [i.type, i.note].filter(Boolean).join(", ")].filter(Boolean).join(" (") + ([i.type, i.note].filter(Boolean).length ? ")" : "")).join("; ");
+    if (type === "medlist") return readMedList(value).map(medText).join("; ");
     if (Array.isArray(value)) return value.join(", ");
     if (type === "date" && value) return fmtDate(value);
     return String(value ?? "").trim();
@@ -89,12 +91,11 @@
 
   // ---------- Mediciones y gráficos ----------
 
-  const KIND_ORDER = { previous: 0, base: 1, control: 2 };
+  const KIND_ORDER = { base: 0, control: 1 };
   function timeline() {
     const p = state.patient;
     const d = p.intake_data || {};
     const points = [];
-    if (d.previous_date && (num(d.previous_weight) || num(d.previous_height))) points.push({ kind: "previous", label: "Medición anterior (ficha)", measured_at: d.previous_date, weight_kg: num(d.previous_weight), height_cm: num(d.previous_height) });
     points.push({ kind: "base", label: "Ficha inicial", measured_at: d.appointment_date || p.created_on, weight_kg: num(p.weight_kg), height_cm: num(p.height_cm), waist_cm: num(d.waist_circumference), head_cm: num(d.head_circumference), blood_pressure: d.blood_pressure || null });
     state.items.forEach((m) => points.push({ ...m, kind: "control", label: m.milestone_type }));
     let lastWeight = null;
@@ -190,7 +191,7 @@
   }
 
   function charts(rows) {
-    const series = (key) => rows.filter((r) => r[key] !== null && r[key] !== undefined).map((r) => ({ date: r.measured_at, value: r[key], age: r.age, kindLabel: r.kind === "base" ? "Ficha inicial" : r.kind === "previous" ? "Medición anterior" : r.label }));
+    const series = (key) => rows.filter((r) => r[key] !== null && r[key] !== undefined).map((r) => ({ date: r.measured_at, value: r[key], age: r.age, kindLabel: r.kind === "base" ? "Ficha inicial" : r.label }));
     return `<div class="follow-charts">${lineChart("Peso", "kg", series("weight_kg"))}${lineChart("Talla", "cm", series("height_cm"))}${lineChart("IMC", "kg/m²", series("bmi"))}</div>
       <details class="measure-table"><summary>Tabla de mediciones</summary>${measureTable(rows)}</details>`;
   }
@@ -266,10 +267,12 @@
       controls.forEach((control) => {
         if (control.type === "checkbox") control.checked = (Array.isArray(value) ? value : value ? [value] : []).includes(control.value);
         else if (control.closest("[data-foodlist]")) control.value = JSON.stringify(readFoodList(value));
+        else if (control.closest("[data-medlist]")) control.value = JSON.stringify(readMedList(value));
         else control.value = value ?? "";
       });
     }
     renderFoodLists();
+    renderMedLists();
     applyConditions(formEl);
     refreshChanges();
   }
@@ -286,6 +289,7 @@
     if (!controls.length) return undefined;
     if (FIELDS[key]?.type === "multi") return controls.filter((c) => c.checked).map((c) => c.value);
     if (FIELDS[key]?.type === "foodlist") return readFoodList(controls[0].value);
+    if (FIELDS[key]?.type === "medlist") return readMedList(controls[0].value);
     return controls[0].value.trim();
   }
 
@@ -335,8 +339,10 @@
   // Listas (alimentos u opciones múltiples): se muestra lo agregado y lo quitado; otros campos: antes → después.
   function changeText(key, before, after) {
     const type = FIELDS[key]?.type;
-    if (type === "foodlist" || type === "multi") {
-      const items = (value) => (type === "foodlist" ? readFoodList(value).map((i) => ({ id: i.food.trim().toLowerCase(), text: display(key, [i]) })) : (Array.isArray(value) ? value : value ? [value] : []).map((v) => ({ id: String(v), text: String(v) })));
+    if (type === "foodlist" || type === "multi" || type === "medlist") {
+      const items = (value) => (type === "foodlist" ? readFoodList(value).map((i) => ({ id: i.food.trim().toLowerCase(), text: display(key, [i]) }))
+        : type === "medlist" ? readMedList(value).map((i) => ({ id: i.name.trim().toLowerCase(), text: medText(i) }))
+        : (Array.isArray(value) ? value : value ? [value] : []).map((v) => ({ id: String(v), text: String(v) })));
       const a = items(before);
       const b = items(after);
       const added = b.filter((x) => !a.some((y) => y.id === x.id));
@@ -440,6 +446,7 @@
     async "save-milestone"() {
       const formEl = $("#milestoneForm");
       formEl.querySelectorAll("[data-foodlist]").forEach((box) => { if (box.querySelector('[data-food="food"]').value.trim()) addFood(box); });
+      formEl.querySelectorAll("[data-medlist]").forEach((box) => { if (box.querySelector('[data-med="name"]').value.trim()) addMed(box); });
       const updates = Object.fromEntries(changedKeys(formEl).map((key) => [key, readValue(formEl, key)]));
       const record = Object.fromEntries(VISIT_KEYS.map((key) => [key, readValue(formEl, key)]).filter(([, value]) => (Array.isArray(value) ? value.length : value)));
       const el = formEl.elements;
@@ -476,6 +483,10 @@
   };
 
   body.addEventListener("click", async (event) => {
+    const medAdd = event.target.closest("#milestoneForm [data-med-add]");
+    if (medAdd) { addMed(medAdd.closest("[data-medlist]")); refreshChanges(); return; }
+    const medRemove = event.target.closest("#milestoneForm [data-med-remove]");
+    if (medRemove) { removeMed(medRemove); refreshChanges(); return; }
     const add = event.target.closest("#milestoneForm [data-food-add]");
     if (add) { addFood(add.closest("[data-foodlist]")); refreshChanges(); return; }
     const remove = event.target.closest("#milestoneForm [data-food-remove]");
@@ -495,6 +506,7 @@
   });
   body.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && event.target.closest("#milestoneForm .food-add")) { event.preventDefault(); addFood(event.target.closest("[data-foodlist]")); refreshChanges(); }
+    if (event.key === "Enter" && event.target.closest("#milestoneForm .med-add")) { event.preventDefault(); addMed(event.target.closest("[data-medlist]")); refreshChanges(); }
   });
   body.addEventListener("change", (event) => {
     const formEl = event.target.closest("#milestoneForm");

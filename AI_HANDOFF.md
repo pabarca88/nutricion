@@ -52,6 +52,7 @@ cpanel-deploy/errors.js              HttpError compartido
 cpanel-deploy/plans.js               Planes de alimentación (validación, versiones, aprobación, exclusiones)
 cpanel-deploy/catalog.js             Base de alimentos, reglas por edad, generador de porciones y ejemplos de menú
 cpanel-deploy/milestones.js          Hitos de seguimiento y cálculo del estado actual de la ficha
+cpanel-deploy/plan-pdf.js            PDF del plan para entregar a la familia (pdfkit)
 cpanel-deploy/public/index.html      Interfaz (una sola página)
 cpanel-deploy/public/requirements.js Cálculo de energía y macronutrientes (Schofield peso y talla, DRI/AMDR)
 cpanel-deploy/public/nutri.js        Ficha clínica, lista de pacientes, listas de alimentos
@@ -165,11 +166,13 @@ curl http://localhost:3000/nutricion/api/food-groups
 ## Estado actual (qué está construido)
 
 - **Pacientes:** lista con último peso/talla; botones **Ficha inicial**, **Seguimiento** y **Planes**.
-- **Ficha inicial** (versión base, editable): entrevista clínica completa en `patients.intake_data`; fecha de atención = hoy por defecto; listas estructuradas de alimentos a excluir (alergia/intolerancia), preferidos y rechazados, con sugerencias del catálogo.
+- **Ficha inicial** (versión base, editable): entrevista clínica completa en `patients.intake_data`; fecha de atención = hoy por defecto; IMC calculado en vivo junto a peso y talla; listas estructuradas de alimentos a excluir (alergia/intolerancia), preferidos y rechazados, con sugerencias del catálogo; medicamentos como lista `medications: [{ name, dose, frequency, reason }]` (tipo de campo `medlist` en `nutri.js`; el texto libre antiguo se convierte en un ítem a completar). Sin peso/talla/fecha "anterior" (se eliminaron: el seguimiento se hace por hitos).
 - **Seguimiento clínico por hitos:** mediciones, evolución, registro de la atención y solo los cambios de la ficha; estado actual = ficha + cambios; gráficos de peso, talla e IMC; velocidad de talla.
 - **Requerimientos:** Schofield con peso y talla, proteína RDA por g/kg, distribución dentro de AMDR; peso de cálculo editable.
 - **Base de alimentos:** referencia USDA, catálogo en español con etiquetas de exclusión y tiempos de comida habituales, porción de referencia por grupo (mediana o valor manual), reglas de porciones por edad.
 - **Planes:** borrador → aprobado (inmutable) → reemplazado; pauta por porciones generada y editable; 3+ días de menú de ejemplo; avisos y confirmación si se mencionan alimentos excluidos o rechazados.
+- **PDF del plan:** `GET /api/plans/:id/pdf` (`plan-pdf.js`, dependencia `pdfkit`). Incluye paciente, estado (borrador con advertencia "no entregar sin aprobación" o datos de aprobación), requerimientos, alimentos a evitar/preferidos, porciones por comida con equivalencias, menús de ejemplo, tiempos de comida e indicaciones. **No incluye las notas profesionales internas.** Botones "Guardar y descargar PDF" (borrador: guarda primero) y "Descargar PDF" (aprobado). Las fuentes estándar usan WinAnsi: `clean()` reemplaza caracteres no soportados (★, →).
+- **Tabla de porciones (editor y PDF):** filas agrupadas por macronutriente principal (Carbohidratos: cereales, verduras, frutas, azúcares; Proteínas: carnes, lácteos, leguminosas; Grasas: aceites, alimentos ricos en lípidos) y cantidades en **medidas caseras** del alimento de referencia de cada grupo (`measureFood`: prefiere preferidos y medidas en tazas/cucharadas; carnes en gramos). Las porciones de intercambio siguen siendo el dato editable y guardado.
 
 ## Decisiones pendientes de la nutricionista
 
