@@ -8,7 +8,7 @@ Esta guía permite descargar el proyecto desde GitHub y levantar una copia local
 - MySQL 8 o superior en ejecución
 - Git
 
-En macOS, MySQL puede instalarse con Homebrew:
+En Windows, usa el instalador oficial de MySQL (MySQL Installer); el cliente queda en `C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe`. En macOS, MySQL puede instalarse con Homebrew:
 
 ```sh
 brew install mysql
@@ -19,7 +19,7 @@ brew services start mysql
 
 ```sh
 git clone URL_DEL_REPOSITORIO
-cd nutricion-pediatrica/cpanel-deploy
+cd nutricion/cpanel-deploy
 npm install
 ```
 
@@ -53,15 +53,39 @@ Desde la carpeta `cpanel-deploy`, ejecuta las migraciones en orden:
 ```sh
 mysql -u nutricion_dev -p nutripediatrica_dev < database/001_patients.sql
 mysql -u nutricion_dev -p nutripediatrica_dev < database/002_patient_intake.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/003_nutrition_plans.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/004_plan_excluded_foods.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/005_plan_food_preferences.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/006_food_catalog.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/007_food_meal_types.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/008_patient_measurements.sql
+mysql -u nutricion_dev -p nutripediatrica_dev < database/009_patient_milestones.sql
 ```
 
+En una base nueva, `002_patient_intake.sql` termina con `ERROR 1060: Duplicate column name 'intake_data'`. Es esperado: la versión actual de `001_patients.sql` ya crea esa columna; la 002 solo existe para bases creadas con la versión antigua de la 001. Continúa con las siguientes (003 en adelante).
+
 La contraseña de ejemplo es `nutricion_dev_local`.
+
+## 3b. Cargar la base de alimentos
+
+La pauta por porciones usa un catálogo de alimentos con nutrientes de **USDA FoodData Central, SR Legacy** (dominio público, CC0). Los datos ya vienen en el repositorio; impórtalos después de las migraciones:
+
+```sh
+mysql --default-character-set=utf8mb4 -u nutricion_dev -p nutripediatrica_dev < database/seeds/usda_foods.sql
+mysql --default-character-set=utf8mb4 -u nutricion_dev -p nutripediatrica_dev < database/seeds/catalogo.sql
+```
+
+Se pueden repetir sin duplicar datos (el catálogo no sobrescribe alimentos ya editados). En Windows usa siempre `--default-character-set=utf8mb4` para que las tildes se guarden bien.
+
+Para regenerarlos desde los CSV oficiales (https://fdc.nal.usda.gov/download-datasets, archivo `FoodData_Central_sr_legacy_food_csv_2018-04.zip`), usa `scripts/import-usda.mjs` y `scripts/seed-catalog.mjs` con la opción `--sql`, o sin ella para cargar directo con `node --env-file=.env`.
 
 ## 4. Configurar el entorno local
 
 ```sh
 cp .env.example .env
 ```
+
+En PowerShell: `Copy-Item .env.example .env`.
 
 El archivo `.env` queda solo en el computador local. No debe subirse a GitHub. Para la configuración anterior, usa:
 
@@ -92,4 +116,8 @@ Los archivos `database/*.sql` sí se suben a GitHub. Los archivos `.env`, `node_
 
 ## Despliegue en cPanel
 
-Sube el contenido de `cpanel-deploy` a la raíz configurada para la aplicación Node.js. Crea la base y ejecuta las mismas migraciones desde phpMyAdmin. Configura las variables de entorno reales en cPanel, usa `app.js` como archivo de inicio, ejecuta **NPM Install** y reinicia la aplicación.
+Sube el contenido de `cpanel-deploy` a la raíz configurada para la aplicación Node.js. Crea la base y ejecuta las mismas migraciones desde phpMyAdmin (Importar). Para la base de alimentos, importa los archivos de `database/seeds/`. Importa primero `database/seeds/usda_foods.sql` y luego `database/seeds/catalogo.sql`. Configura las variables de entorno reales en cPanel, usa `app.js` como archivo de inicio, ejecuta **NPM Install** y reinicia la aplicación.
+
+## Caso de prueba ficticio
+
+Con la app en ejecución, `node scripts/seed-demo.mjs` crea el paciente ficticio "CASO DE PRUEBA - Sofía Ficticia" con ficha inicial y un año de hitos de seguimiento. No contiene datos reales.

@@ -1,0 +1,805 @@
+{
+  "_source": "Nutrientes: USDA FoodData Central, SR Legacy (2018-04), dominio público. Gramos de porción: medidas caseras publicadas por USDA (fracciones calculadas cuando se indica). Nombres, grupos y etiquetas: selección inicial, revisar por la profesional. Tiempos de comida (\"meals\"): uso habitual en Chile, propuesta inicial editable.",
+  "foods": [
+    {
+      "group": "cereales",
+      "name": "Arroz blanco cocido",
+      "aliases": "arroz",
+      "tags": "",
+      "fdc_id": 168878,
+      "portion_label": "1/2 taza",
+      "portion_grams": 79,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Arroz integral cocido",
+      "aliases": "arroz",
+      "tags": "",
+      "fdc_id": 169704,
+      "portion_label": "1/2 taza",
+      "portion_grams": 101,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Fideos cocidos",
+      "aliases": "pasta, tallarines, spaghetti, macarrones",
+      "tags": "gluten, trigo",
+      "fdc_id": 169737,
+      "portion_label": "1/2 taza",
+      "portion_grams": 62,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Pan blanco tipo marraqueta",
+      "aliases": "pan, marraqueta, pan francés, baguette",
+      "tags": "gluten, trigo",
+      "fdc_id": 172675,
+      "portion_label": "50 g",
+      "portion_grams": 50,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "cereales",
+      "name": "Pan de molde blanco",
+      "aliases": "pan, pan de molde",
+      "tags": "gluten, trigo",
+      "fdc_id": 174924,
+      "portion_label": "1 rebanada",
+      "portion_grams": 29,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "cereales",
+      "name": "Pan de molde integral",
+      "aliases": "pan, pan integral",
+      "tags": "gluten, trigo",
+      "fdc_id": 172688,
+      "portion_label": "1 rebanada",
+      "portion_grams": 32,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "cereales",
+      "name": "Avena",
+      "aliases": "avena en hojuelas",
+      "tags": "avena, gluten",
+      "fdc_id": 173904,
+      "portion_label": "1/3 taza",
+      "portion_grams": 27,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "cereales",
+      "name": "Papa cocida",
+      "aliases": "papas, puré de papas",
+      "tags": "",
+      "fdc_id": 170440,
+      "portion_label": "1/2 taza",
+      "portion_grams": 78,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Choclo cocido",
+      "aliases": "maíz, choclo",
+      "tags": "maiz",
+      "fdc_id": 169999,
+      "portion_label": "1/2 taza",
+      "portion_grams": 75,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Quínoa cocida",
+      "aliases": "quinoa, quinua",
+      "tags": "",
+      "fdc_id": 168917,
+      "portion_label": "1/2 taza",
+      "portion_grams": 93,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Galletas de agua",
+      "aliases": "galletas soda, galletas saladas",
+      "tags": "gluten, trigo",
+      "fdc_id": 172746,
+      "portion_label": "5 unidades",
+      "portion_grams": 15,
+      "meals": "colacion, once"
+    },
+    {
+      "group": "cereales",
+      "name": "Cereal tipo corn flakes",
+      "aliases": "cereal, hojuelas de maíz",
+      "tags": "maiz, gluten",
+      "fdc_id": 174648,
+      "portion_label": "1 taza",
+      "portion_grams": 28,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "cereales",
+      "name": "Arvejas cocidas",
+      "aliases": "arvejas, guisantes",
+      "tags": "",
+      "fdc_id": 170420,
+      "portion_label": "1/2 taza",
+      "portion_grams": 80,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "cereales",
+      "name": "Camote cocido",
+      "aliases": "batata",
+      "tags": "",
+      "fdc_id": 168483,
+      "portion_label": "1/2 taza",
+      "portion_grams": 100,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Lechuga",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 169248,
+      "portion_label": "1 taza picada",
+      "portion_grams": 57,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Tomate",
+      "aliases": "tomates",
+      "tags": "",
+      "fdc_id": 170457,
+      "portion_label": "1/2 taza picado",
+      "portion_grams": 90,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Zanahoria cruda",
+      "aliases": "zanahoria rallada",
+      "tags": "",
+      "fdc_id": 170393,
+      "portion_label": "1/2 taza rallada",
+      "portion_grams": 55,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Zanahoria cocida",
+      "aliases": "zanahoria",
+      "tags": "",
+      "fdc_id": 170394,
+      "portion_label": "1/2 taza",
+      "portion_grams": 78,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Zapallo cocido",
+      "aliases": "zapallo camote, calabaza",
+      "tags": "",
+      "fdc_id": 169296,
+      "portion_label": "1/2 taza",
+      "portion_grams": 103,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Zapallo italiano cocido",
+      "aliases": "zucchini, calabacín",
+      "tags": "",
+      "fdc_id": 169292,
+      "portion_label": "1/2 taza",
+      "portion_grams": 90,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Brócoli cocido",
+      "aliases": "brocoli",
+      "tags": "",
+      "fdc_id": 169967,
+      "portion_label": "1/2 taza",
+      "portion_grams": 78,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Coliflor cocida",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 170397,
+      "portion_label": "1/2 taza",
+      "portion_grams": 62,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Espinaca cocida",
+      "aliases": "espinacas",
+      "tags": "",
+      "fdc_id": 168463,
+      "portion_label": "1/2 taza",
+      "portion_grams": 90,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Pepino",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 168409,
+      "portion_label": "1/2 taza",
+      "portion_grams": 52,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Porotos verdes cocidos",
+      "aliases": "porotos verdes, judías verdes",
+      "tags": "",
+      "fdc_id": 169141,
+      "portion_label": "1/2 taza",
+      "portion_grams": 63,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Betarraga cocida",
+      "aliases": "betarraga, remolacha",
+      "tags": "",
+      "fdc_id": 169146,
+      "portion_label": "1/2 taza",
+      "portion_grams": 85,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Repollo",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 169975,
+      "portion_label": "1 taza picado",
+      "portion_grams": 89,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Pimentón rojo",
+      "aliases": "pimiento",
+      "tags": "",
+      "fdc_id": 170108,
+      "portion_label": "1/2 taza picado",
+      "portion_grams": 75,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Cebolla",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 170000,
+      "portion_label": "1/4 taza picada",
+      "portion_grams": 40,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "verduras",
+      "name": "Apio",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 169988,
+      "portion_label": "1/2 taza picado",
+      "portion_grams": 51,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Manzana",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 171688,
+      "portion_label": "1 unidad mediana",
+      "portion_grams": 182,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Plátano",
+      "aliases": "banana, banano",
+      "tags": "",
+      "fdc_id": 173944,
+      "portion_label": "1 unidad chica",
+      "portion_grams": 101,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Naranja",
+      "aliases": "",
+      "tags": "citricos",
+      "fdc_id": 169097,
+      "portion_label": "1 unidad",
+      "portion_grams": 131,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Pera",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 169118,
+      "portion_label": "1 unidad chica",
+      "portion_grams": 148,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Uva",
+      "aliases": "uvas",
+      "tags": "",
+      "fdc_id": 174683,
+      "portion_label": "1/2 taza",
+      "portion_grams": 76,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Frutillas",
+      "aliases": "frutilla, fresas",
+      "tags": "",
+      "fdc_id": 167762,
+      "portion_label": "1 taza",
+      "portion_grams": 144,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Kiwi",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 168153,
+      "portion_label": "1 unidad",
+      "portion_grams": 69,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Durazno",
+      "aliases": "melocotón",
+      "tags": "",
+      "fdc_id": 169928,
+      "portion_label": "1 unidad mediana",
+      "portion_grams": 150,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Mandarina",
+      "aliases": "",
+      "tags": "citricos",
+      "fdc_id": 169105,
+      "portion_label": "1 unidad mediana",
+      "portion_grams": 88,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Melón",
+      "aliases": "melon calameño, cantalupo",
+      "tags": "",
+      "fdc_id": 169092,
+      "portion_label": "1 taza en cubos",
+      "portion_grams": 160,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Sandía",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 167765,
+      "portion_label": "1 taza en cubos",
+      "portion_grams": 152,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Piña",
+      "aliases": "ananá",
+      "tags": "",
+      "fdc_id": 169124,
+      "portion_label": "1/2 taza en trozos",
+      "portion_grams": 83,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "frutas",
+      "name": "Ciruela",
+      "aliases": "ciruelas",
+      "tags": "",
+      "fdc_id": 169949,
+      "portion_label": "2 unidades",
+      "portion_grams": 132,
+      "meals": "desayuno, colacion, almuerzo, once, cena"
+    },
+    {
+      "group": "lacteos",
+      "name": "Leche entera",
+      "aliases": "leche",
+      "tags": "leche, lactosa",
+      "fdc_id": 171265,
+      "portion_label": "1 taza",
+      "portion_grams": 244,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "lacteos",
+      "name": "Leche semidescremada",
+      "aliases": "leche, leche 2%",
+      "tags": "leche, lactosa",
+      "fdc_id": 171267,
+      "portion_label": "1 taza",
+      "portion_grams": 244,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "lacteos",
+      "name": "Leche descremada",
+      "aliases": "leche",
+      "tags": "leche, lactosa",
+      "fdc_id": 171269,
+      "portion_label": "1 taza",
+      "portion_grams": 245,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "lacteos",
+      "name": "Yogur natural entero",
+      "aliases": "yogur, yoghurt",
+      "tags": "leche, lactosa",
+      "fdc_id": 171284,
+      "portion_label": "1 pote (170 g)",
+      "portion_grams": 170,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "lacteos",
+      "name": "Yogur natural descremado",
+      "aliases": "yogur, yoghurt",
+      "tags": "leche, lactosa",
+      "fdc_id": 170887,
+      "portion_label": "1 pote (170 g)",
+      "portion_grams": 170,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "lacteos",
+      "name": "Quesillo",
+      "aliases": "queso cottage",
+      "tags": "leche, lactosa, queso",
+      "fdc_id": 173417,
+      "portion_label": "1/2 taza",
+      "portion_grams": 113,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "lacteos",
+      "name": "Queso gauda",
+      "aliases": "queso, queso mantecoso",
+      "tags": "leche, queso",
+      "fdc_id": 171241,
+      "portion_label": "28 g",
+      "portion_grams": 28,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "lacteos",
+      "name": "Queso fresco",
+      "aliases": "queso",
+      "tags": "leche, lactosa, queso",
+      "fdc_id": 172223,
+      "portion_label": "30 g",
+      "portion_grams": 30,
+      "meals": "desayuno, once, colacion"
+    },
+    {
+      "group": "proteinas",
+      "name": "Pechuga de pollo cocida",
+      "aliases": "pollo",
+      "tags": "pollo",
+      "fdc_id": 171477,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Trutro de pollo sin piel cocido",
+      "aliases": "pollo, muslo",
+      "tags": "pollo",
+      "fdc_id": 172388,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Carne molida 90% magra cocida",
+      "aliases": "carne, vacuno, carne molida",
+      "tags": "vacuno",
+      "fdc_id": 171794,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Carne magra de vacuno (posta)",
+      "aliases": "carne, vacuno, posta, bistec",
+      "tags": "vacuno",
+      "fdc_id": 168649,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Lomo de cerdo cocido",
+      "aliases": "cerdo",
+      "tags": "cerdo",
+      "fdc_id": 168250,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Pescado blanco cocido (merluza, reineta)",
+      "aliases": "pescado, merluza, reineta",
+      "tags": "pescado",
+      "fdc_id": 175161,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Salmón cocido",
+      "aliases": "pescado, salmon",
+      "tags": "pescado",
+      "fdc_id": 175168,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Atún en agua",
+      "aliases": "pescado, atun",
+      "tags": "pescado",
+      "fdc_id": 173709,
+      "portion_label": "50 g escurrido",
+      "portion_grams": 50,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Sardinas en aceite",
+      "aliases": "pescado, sardina",
+      "tags": "pescado",
+      "fdc_id": 175139,
+      "portion_label": "50 g escurrido",
+      "portion_grams": 50,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Huevo cocido",
+      "aliases": "huevo, huevos",
+      "tags": "huevo",
+      "fdc_id": 173424,
+      "portion_label": "1 unidad",
+      "portion_grams": 50,
+      "meals": "desayuno, once, almuerzo, cena"
+    },
+    {
+      "group": "proteinas",
+      "name": "Pechuga de pavo cocida",
+      "aliases": "pavo",
+      "tags": "pavo",
+      "fdc_id": 171496,
+      "portion_label": "50 g cocido",
+      "portion_grams": 50,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "leguminosas",
+      "name": "Porotos cocidos",
+      "aliases": "porotos, frijoles, legumbres",
+      "tags": "legumbres",
+      "fdc_id": 173740,
+      "portion_label": "1/2 taza",
+      "portion_grams": 89,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "leguminosas",
+      "name": "Porotos negros cocidos",
+      "aliases": "porotos, frijoles negros, legumbres",
+      "tags": "legumbres",
+      "fdc_id": 173735,
+      "portion_label": "1/2 taza",
+      "portion_grams": 86,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "leguminosas",
+      "name": "Lentejas cocidas",
+      "aliases": "lentejas, legumbres",
+      "tags": "legumbres",
+      "fdc_id": 172421,
+      "portion_label": "1/2 taza",
+      "portion_grams": 99,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "leguminosas",
+      "name": "Garbanzos cocidos",
+      "aliases": "garbanzos, legumbres",
+      "tags": "legumbres",
+      "fdc_id": 173757,
+      "portion_label": "1/2 taza",
+      "portion_grams": 82,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "grasas",
+      "name": "Aceite vegetal",
+      "aliases": "aceite, aceite de canola",
+      "tags": "",
+      "fdc_id": 172336,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 4.5,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "grasas",
+      "name": "Aceite de oliva",
+      "aliases": "aceite",
+      "tags": "",
+      "fdc_id": 171413,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 4.5,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "grasas",
+      "name": "Mantequilla",
+      "aliases": "",
+      "tags": "leche",
+      "fdc_id": 173430,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 5,
+      "meals": "desayuno, once"
+    },
+    {
+      "group": "grasas",
+      "name": "Margarina",
+      "aliases": "",
+      "tags": "",
+      "fdc_id": 173585,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 5,
+      "meals": "desayuno, once"
+    },
+    {
+      "group": "grasas",
+      "name": "Mayonesa",
+      "aliases": "",
+      "tags": "huevo",
+      "fdc_id": 171009,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 4.6,
+      "meals": "almuerzo, once, cena"
+    },
+    {
+      "group": "lipidos",
+      "name": "Palta",
+      "aliases": "aguacate",
+      "tags": "",
+      "fdc_id": 171705,
+      "portion_label": "1/4 taza en cubos",
+      "portion_grams": 38,
+      "meals": "desayuno, once, almuerzo, cena"
+    },
+    {
+      "group": "lipidos",
+      "name": "Maní tostado sin sal",
+      "aliases": "maní, cacahuate",
+      "tags": "mani",
+      "fdc_id": 173806,
+      "portion_label": "14 g",
+      "portion_grams": 14,
+      "meals": "colacion, desayuno, once"
+    },
+    {
+      "group": "lipidos",
+      "name": "Nueces",
+      "aliases": "nuez",
+      "tags": "frutos secos, nueces",
+      "fdc_id": 170187,
+      "portion_label": "7 mitades",
+      "portion_grams": 14,
+      "meals": "colacion, desayuno, once"
+    },
+    {
+      "group": "lipidos",
+      "name": "Almendras",
+      "aliases": "almendra",
+      "tags": "frutos secos, almendras",
+      "fdc_id": 170567,
+      "portion_label": "14 g",
+      "portion_grams": 14,
+      "meals": "colacion, desayuno, once"
+    },
+    {
+      "group": "lipidos",
+      "name": "Semillas de chía",
+      "aliases": "chía",
+      "tags": "semillas",
+      "fdc_id": 170554,
+      "portion_label": "14 g",
+      "portion_grams": 14,
+      "meals": "colacion, desayuno, once"
+    },
+    {
+      "group": "lipidos",
+      "name": "Aceitunas",
+      "aliases": "aceituna",
+      "tags": "",
+      "fdc_id": 169094,
+      "portion_label": "5 unidades grandes",
+      "portion_grams": 22,
+      "meals": "almuerzo, cena"
+    },
+    {
+      "group": "azucares",
+      "name": "Azúcar",
+      "aliases": "azucar",
+      "tags": "azucar",
+      "fdc_id": 169655,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 4.2,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "azucares",
+      "name": "Miel",
+      "aliases": "",
+      "tags": "azucar",
+      "fdc_id": 169640,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 7,
+      "meals": "desayuno, colacion, once"
+    },
+    {
+      "group": "azucares",
+      "name": "Mermelada",
+      "aliases": "",
+      "tags": "azucar",
+      "fdc_id": 169641,
+      "portion_label": "1 cucharadita",
+      "portion_grams": 7,
+      "meals": "desayuno, colacion, once"
+    }
+  ]
+}

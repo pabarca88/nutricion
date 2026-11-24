@@ -3,3 +3,306 @@
 .edit-patient{justify-self:end;background:#edf7f2;color:#28735f;border:1px solid #d6e9e1;border-radius:7px;padding:8px 10px;font-size:12px;font-weight:bold}.edit-patient:hover{background:#dff1e9}.edit-patient:disabled{opacity:.6;cursor:wait}
 .stats-simple{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px}.title p{margin:5px 0 0;color:#718880;font-size:12px;line-height:1.45}
 .clinical-summary{display:flex;align-items:center;justify-content:space-between;margin:0 0 22px;padding:13px 16px;background:#eef7f3;border:1px solid #dcece5;border-radius:10px;color:#54726a}.clinical-summary b{color:#1d6d59;font-size:18px}.clinical-summary .plain{background:#fff;border:1px solid #d5e9e0}
+
+/* Acciones por paciente */
+.patients article{grid-template-columns:46px 1fr 100px 100px auto}
+.patient-actions{display:flex;gap:8px;justify-content:flex-end}
+.open-plans{background:#1f705d;color:#fff;border-radius:7px;padding:8px 12px;font-size:12px;font-weight:bold}
+.open-plans:hover{background:#185b4b}
+.open-plans:disabled{opacity:.6;cursor:wait}
+.plan-title-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+@media(max-width:720px){.patients article{grid-template-columns:40px 1fr}.patients article>div:nth-last-child(-n+3){display:none}.patients article>div.patient-actions{display:flex;grid-column:1/-1;justify-content:flex-start}.plan-title-actions{align-items:flex-start}}
+
+/* Planes de alimentación */
+.plan-modal{width:min(1180px,calc(100% - 32px))}
+#planBody{position:relative;display:grid;gap:6px}
+#planBody>h2{margin:0;font-size:24px}
+#planBody .eyebrow{color:#82948e;font-size:11px;font-weight:bold}
+.plan-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;margin-top:14px;align-items:start}
+.plan-history{background:#f6faf8;border:1px solid #e1ece7;border-radius:12px;padding:14px;position:sticky;top:0}
+.plan-history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.plan-history h3,.plan-editor h3{margin:0;font-size:15px}
+.plan-history-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.plan-history-list button{width:100%;text-align:left;background:#fff;border:1px solid #e1ece7;border-radius:9px;padding:10px;display:grid;gap:5px;color:inherit;font:inherit}
+.plan-history-list button>span{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.plan-history-list button small{color:#7b8f89;font-size:11px}
+.plan-history-list button:hover{border-color:#b9dccf}
+.plan-history-list button.active{border-color:#1f705d;box-shadow:0 0 0 2px #1f705d22}
+.plan-empty{color:#7b8f89;font-size:12px;margin:6px 0}
+.status-badge{border-radius:999px;padding:4px 9px;font-size:11px;font-weight:bold;white-space:nowrap;background:#eef2f1;color:#5d726c}
+.status-badge.draft{background:#fff1d9;color:#9a651c}
+.status-badge.approved{background:#dff3ea;color:#1d6d59}
+.status-badge.replaced{background:#eef2f1;color:#71857f}
+.plan-form{display:grid;gap:14px}
+.plan-form .plan-title h3{font-size:18px;margin-top:4px}
+.plan-form .plan-title small{color:#82948e;font-size:11px}
+.plan-form fieldset{margin:0;display:grid;gap:12px}
+.plan-form fieldset[disabled] input,.plan-form fieldset[disabled] textarea{background:#f6faf8;color:#2c5049}
+.plan-form .wide{grid-column:1/-1}
+.plan-form .plain{justify-self:start}
+.calc-variables{grid-column:1/-1;margin:0;color:#6c837b;font-size:12px}
+.macro-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.macro-grid output{display:block;margin-top:5px;color:#1d6d59;font-size:13px}
+.sum-check{margin:0;color:#6c837b;font-size:12px}
+.sum-check.warn{color:#b0573f;font-weight:bold}
+.meal-rows{display:grid;gap:10px}
+.meal-row{display:grid;grid-template-columns:minmax(0,1.1fr) 90px minmax(0,2fr) 32px;gap:10px;align-items:start;border-bottom:1px dashed #dfe9e5;padding-bottom:10px}
+fieldset[disabled] .meal-row{grid-template-columns:minmax(0,1.1fr) 90px minmax(0,2fr)}
+.meal-remove{margin-top:22px;background:#fbeeea;color:#b0573f;border-radius:6px;height:38px;font-size:18px}
+.plan-context{background:#f6faf8;border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;font-size:12px}
+.plan-context summary{cursor:pointer;font-weight:bold;color:#1f705d}
+.plan-context dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;margin:10px 0 0}
+.plan-context dt{color:#6c837b;font-weight:bold}
+.plan-context dd{margin:0;color:#35564f}
+.plan-approval{margin:0;background:#dff3ea;color:#1d6d59;border-radius:9px;padding:10px 12px;font-size:13px}
+.plan-actions{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;border-top:1px solid #e4eeea;padding-top:14px}
+.approver{flex:1 1 260px;max-width:360px}
+.plan-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.plan-buttons .save{position:static}
+.secondary{background:#edf7f2;color:#1f705d;border:1px solid #cfe5db;border-radius:8px;padding:13px 17px;font-weight:bold}
+.danger{background:#fff;color:#b0573f;border:1px solid #efd3ca;border-radius:8px;padding:13px 17px;font-weight:bold}
+.plan-buttons button:disabled{opacity:.6;cursor:wait}
+#planMessage{margin:0;font-size:13px;min-height:1em}
+#planMessage.error,#planMessage.warn{color:#b0573f}
+#planMessage.ok{color:#1d6d59;font-weight:bold}
+#planMessage.info{color:#55716a}
+@media(max-width:860px){.plan-layout{grid-template-columns:1fr}.plan-history{position:static}}
+@media(max-width:720px){.macro-grid{grid-template-columns:1fr}.meal-row,fieldset[disabled] .meal-row{grid-template-columns:1fr 80px}.meal-row .meal-notes{grid-column:1/-1}.meal-remove{margin-top:0;grid-column:2;grid-row:3}.plan-context dl{grid-template-columns:1fr}}
+
+/* Alimentos excluidos (ficha y plan) */
+.field-wide{grid-column:1/-1}
+.field-label{display:block;font-size:12px;font-weight:bold;color:#54726a}
+.field-hint{display:block;margin-top:6px;color:#7b8f89;font-size:11px}
+.foodlist{margin-top:6px;border:1px solid #f0d6cc;background:#fffaf8;border-radius:8px;padding:10px}
+.food-chips{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.food-chips li{display:flex;align-items:center;gap:6px;background:#fbe9e3;color:#8a3f2b;border-radius:999px;padding:5px 6px 5px 11px;font-size:12px}
+.food-chips li span{color:#a2614f;font-size:11px}
+.food-chips li button{background:#fff;color:#b0573f;border-radius:50%;width:20px;height:20px;line-height:18px;padding:0;font-size:14px}
+.food-chips .food-empty{background:none;color:#8f9f9a;padding:2px 0}
+.food-add{display:grid;grid-template-columns:minmax(0,1.2fr) 150px minmax(0,1.6fr) auto;gap:8px;align-items:center}
+.food-add input,.food-add select{margin-top:0}
+#exclusionWarnings:not(:empty){margin-top:10px;background:#fff1d9;border:1px solid #f0d49c;border-radius:8px;padding:10px 12px;color:#7a4f12;font-size:12px}
+#exclusionWarnings p{color:#7a4f12;margin:0 0 4px}
+#exclusionWarnings ul{display:block;margin:0;padding-left:18px}
+#exclusionWarnings li{display:list-item;background:none;padding:0;color:#7a4f12;font-size:12px}
+.meal-row.has-excluded{background:#fff6e8;border-radius:8px;box-shadow:0 0 0 2px #f0d49c;padding:8px}
+textarea.has-excluded{border-color:#e0b25b;background:#fffaf0}
+@media(max-width:720px){.food-add{grid-template-columns:1fr 1fr}.food-add input[data-food="food"],.food-add input[data-food="note"]{grid-column:1/-1}}
+
+/* Listas de alimentos: tonos en la ficha y bloque en el plan */
+.foodlist.tone-good{border-color:#cfe5db;background:#f6fbf8}
+.foodlist.tone-good .food-chips li{background:#dff3ea;color:#1d6d59}
+.foodlist.tone-good .food-chips li span{color:#4c8a76}
+.foodlist.tone-good .food-chips li button{color:#1d6d59}
+.foodlist.tone-warn{border-color:#f0dfb8;background:#fffcf4}
+.foodlist.tone-warn .food-chips li{background:#fdf0d3;color:#7a4f12}
+.foodlist.tone-warn .food-chips li span{color:#93682b}
+.foodlist.tone-warn .food-chips li button{color:#9a651c}
+.food-add.no-type{grid-template-columns:minmax(0,1.2fr) minmax(0,1.6fr) auto}
+.patient-foods{border:1px solid #e1ece7;background:#fbfdfc;border-radius:10px;padding:12px 14px;display:grid;gap:10px}
+.food-group h4{margin:0 0 6px;font-size:13px}
+.food-group h4 em{font-style:normal;font-weight:normal;color:#6c837b;font-size:12px}
+.food-group ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.food-group li{border-radius:999px;padding:5px 11px;font-size:12px;display:flex;gap:6px;align-items:center}
+.food-group li span{font-size:11px;opacity:.85}
+.food-group p{margin:0;color:#8f9f9a;font-size:12px}
+.food-group.empty h4{color:#6c837b}
+.food-group.excluded h4{color:#a2482f}
+.food-group.excluded li{background:#fbe9e3;color:#8a3f2b}
+.food-group.rejected h4{color:#8a5a14}
+.food-group.rejected li{background:#fdf0d3;color:#7a4f12}
+.food-group.preferred h4{color:#1d6d59}
+.food-group.preferred li{background:#eef7f3;color:#35695b;border:1px dashed #b9dccf}
+.food-group.preferred li.included{background:#dff3ea;color:#1d6d59;border-style:solid;border-color:#1f705d}
+.food-group.preferred li.included::before{content:"✓";font-weight:bold}
+.patient-foods>small{color:#8f9f9a;font-size:11px}
+@media(max-width:720px){.food-add.no-type{grid-template-columns:1fr auto}.food-add.no-type input[data-food="note"]{grid-column:1/-1}}
+
+/* Base de alimentos */
+.content[hidden]{display:none}
+nav a{display:block}
+.tabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.tabs button{background:#fff;border:1px solid #dce9e4;color:#54726a;border-radius:999px;padding:9px 14px;font-weight:bold;font-size:12px}
+.tabs button.active{background:#1f705d;border-color:#1f705d;color:#fff}
+.table-scroll{overflow-x:auto;margin-top:14px}
+.catalog-table{width:100%;border-collapse:collapse;font-size:12px}
+.catalog-table th{text-align:left;color:#82948e;font-size:11px;font-weight:bold;padding:8px;border-bottom:1px solid #e4eeea;white-space:nowrap}
+.catalog-table td{padding:10px 8px;border-bottom:1px solid #eef3f1;vertical-align:top;color:#35564f}
+.catalog-table td small{display:block;color:#82948e;font-size:11px;margin-top:3px}
+.catalog-table tr.inactive td{opacity:.55}
+.catalog-table tr.editing td{background:#f6faf8}
+.source-badge{display:inline-block;border-radius:999px;padding:4px 9px;font-size:11px;background:#fff1d9;color:#9a651c;white-space:nowrap}
+.source-badge.manual{background:#dff3ea;color:#1d6d59}
+.tag-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.tag-list span{background:#edf7f2;color:#35695b;border-radius:999px;padding:2px 7px;font-size:10px}
+.group-form,.food-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.group-form .wide,.food-form .wide{grid-column:1/-1}
+.group-form small{display:block;color:#82948e;font-weight:normal;margin-top:4px}
+.food-form{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px}
+.food-form fieldset{margin:0}
+.form-buttons{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px}
+.form-buttons .save{position:static}
+.inline-check{display:flex;align-items:center;gap:7px;align-self:end;padding-bottom:10px}
+.inline-check input{width:auto;margin:0}
+.catalog-filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.5fr) auto;gap:12px;margin-top:14px}
+.catalog-message{margin:12px 0 0;font-size:13px;min-height:1em}
+.catalog-message.ok{color:#1d6d59;font-weight:bold}
+.catalog-message.error{color:#b0573f}
+.catalog-message.info{color:#55716a}
+.rule-range{border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;margin-top:14px;background:#fbfdfc}
+.rule-head{display:grid;grid-template-columns:140px 140px auto;gap:12px;align-items:end}
+.rule-head .danger{justify-self:end;padding:9px 12px}
+.rule-table input{margin:0;max-width:110px}
+.macro-grid.four{grid-template-columns:repeat(5,minmax(0,1fr))}
+.usda-search{background:#f6faf8;border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;margin-top:12px}
+.search-row{display:flex;gap:8px;align-items:center}
+.search-row input{flex:1}
+.search-row button{margin-top:5px;white-space:nowrap}
+.usda-results{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px;max-height:260px;overflow:auto}
+.usda-results button{width:100%;text-align:left;background:#fff;border:1px solid #e1ece7;border-radius:8px;padding:9px 10px;font:inherit;color:inherit}
+.usda-results button:hover{border-color:#1f705d}
+.usda-results small{display:block;color:#82948e;font-size:11px;margin-top:3px}
+#foodModal{width:min(820px,calc(100% - 32px))}
+#foodBody{position:relative}
+#foodBody>h2{margin:4px 0 0;font-size:22px}
+#foodBody .eyebrow{color:#82948e;font-size:11px;font-weight:bold}
+
+/* Pauta por porciones en el plan */
+.portion-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.portion-actions .secondary{padding:10px 14px}
+.portion-actions small{color:#7b8f89;font-size:11px;flex:1 1 260px}
+.portion-warnings{margin:0;padding:10px 12px 10px 28px;background:#fff1d9;border:1px solid #f0d49c;border-radius:8px;color:#7a4f12;font-size:12px;display:grid;gap:4px}
+.portion-table{width:100%;border-collapse:collapse;font-size:12px}
+.portion-table th{text-align:center;color:#82948e;font-size:11px;padding:6px;border-bottom:1px solid #e4eeea}
+.portion-table th:first-child{text-align:left}
+.portion-table td{padding:6px;border-bottom:1px solid #eef3f1;text-align:center}
+.portion-table td:first-child{text-align:left;min-width:180px}
+.portion-table td small{display:block;color:#82948e;font-size:10px;margin-top:2px}
+.portion-table input{margin:0;width:64px;padding:6px;text-align:center}
+.portion-daily{font-weight:bold;color:#1d6d59}
+.portion-totals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.portion-totals article{background:#f2f8f5;border-radius:8px;padding:9px 11px;border:1px solid transparent}
+.portion-totals small{display:block;color:#6c837b;font-size:11px}
+.portion-totals b{display:block;font-size:15px;margin:3px 0}
+.portion-totals em{font-style:normal;font-size:11px;color:#6c837b}
+.portion-totals .ok{border-color:#b9dccf}
+.portion-totals .near{border-color:#f0d49c;background:#fffaf0}
+.portion-totals .off{border-color:#efc2b4;background:#fff5f2}
+.portion-foods summary{cursor:pointer;font-weight:bold;color:#1f705d;font-size:12px}
+.portion-group-foods{border-top:1px dashed #e1ece7;padding:8px 0}
+.portion-group-foods h5{margin:0 0 6px;font-size:12px;color:#35564f}
+.portion-group-foods ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.portion-group-foods li{background:#f2f8f5;border-radius:7px;padding:5px 8px;font-size:11px;color:#35564f;display:flex;flex-direction:column}
+.portion-group-foods li span{color:#82948e;font-size:10px}
+.portion-group-foods li.preferred{background:#dff3ea;border:1px solid #1f705d}
+.portion-group-foods .removed{display:block;color:#a2614f;font-size:11px;margin-top:4px}
+@media(max-width:720px){.group-form,.food-form,.catalog-filters,.rule-head{grid-template-columns:1fr}.macro-grid.four{grid-template-columns:1fr 1fr}.portion-totals{grid-template-columns:1fr 1fr}}
+
+/* Requerimientos y ejemplos de menú */
+.quick-plan{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#eef7f3;border:1px solid #cfe5db;border-radius:10px;padding:12px 14px}
+.quick-plan .save{position:static}
+.quick-plan small{flex:1 1 280px;color:#55716a;font-size:12px;line-height:1.4}
+.plan-form .hint{display:block;margin-top:4px;color:#82948e;font-size:11px;font-weight:normal}
+.requirements-box{background:#f6faf8;border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;font-size:12px}
+.requirements-box h4{margin:0 0 8px;font-size:13px;color:#1f705d}
+.requirements-box dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;margin:0}
+.requirements-box dt{color:#6c837b;font-weight:bold}
+.requirements-box dd{margin:0;color:#35564f}
+.requirements-box dd small{color:#82948e;margin-left:4px}
+.requirements-box ul{margin:10px 0 6px;padding-left:18px;color:#7a4f12;display:grid;gap:3px}
+.requirements-box .sources{display:block;color:#82948e;font-size:11px;line-height:1.4}
+.menu-examples{border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;display:grid;gap:10px;background:#fff}
+.examples-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.examples-head h4{margin:0 auto 0 0;font-size:14px;color:#1f705d}
+.day-tabs{display:flex;gap:4px}
+.day-tabs button{background:#fff;border:1px solid #dce9e4;color:#54726a;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:bold}
+.day-tabs button.active{background:#1f705d;border-color:#1f705d;color:#fff}
+.example-meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.example-meals article{background:#f6faf8;border-radius:9px;padding:10px 12px}
+.example-meals h5{margin:0 0 8px;font-size:13px;display:flex;justify-content:space-between;gap:8px;color:#173d36}
+.example-meals h5 span{color:#6c837b;font-weight:normal;font-size:11px}
+.example-meals ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.example-meals li{font-size:12px;color:#35564f;line-height:1.35}
+.example-meals li span{display:block;color:#82948e;font-size:11px}
+.example-meals li.unusual{color:#9a651c}
+@media(max-width:720px){.requirements-box dl{grid-template-columns:1fr}}
+
+/* Seguimiento */
+.open-followup{background:#fff;color:#1f705d;border:1px solid #1f705d;border-radius:7px;padding:8px 12px;font-size:12px;font-weight:bold}
+.open-followup:hover{background:#edf7f2}
+.open-followup:disabled{opacity:.6;cursor:wait}
+.patient-actions{flex-wrap:wrap}
+.measure-source{display:block;color:#82948e;font-size:11px;margin-top:3px}
+#followBody{position:relative;display:grid;gap:12px}
+#followBody>h2{margin:0;font-size:24px}
+#followBody .eyebrow{color:#82948e;font-size:11px;font-weight:bold}
+.follow-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.follow-summary article{background:#f2f8f5;border-radius:9px;padding:12px 14px}
+.follow-summary small{display:block;color:#6c837b;font-size:11px}
+.follow-summary b{display:block;font-size:20px;margin:4px 0;color:#173d36}
+.follow-summary em{font-style:normal;color:#6c837b;font-size:11px}
+.follow-charts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.trend-chart{margin:0;background:#fff;border:1px solid #e1ece7;border-radius:10px;padding:10px 12px 6px;position:relative}
+.trend-chart figcaption{font-size:12px;font-weight:bold;color:#173d36}
+.trend-chart figcaption span{color:#82948e;font-weight:normal}
+.trend-chart svg{width:100%;height:auto;display:block;overflow:visible}
+.trend-chart .grid{stroke:#edf1ef;stroke-width:1}
+.trend-chart .axis{stroke:#d7e5df;stroke-width:1}
+.trend-chart .tick{fill:#82948e;font-size:10px;font-variant-numeric:tabular-nums}
+.trend-chart .end-label{fill:#173d36;font-size:11px;font-weight:bold}
+.trend-chart .hit{fill:transparent;cursor:pointer}
+.chart-tip{position:absolute;transform:translate(-50%,-100%);background:#173d36;color:#fff;border-radius:7px;padding:6px 9px;font-size:11px;pointer-events:none;white-space:nowrap;box-shadow:0 4px 14px #1235}
+.chart-tip b{display:block;font-size:13px}
+.chart-tip span{color:#cfe5db}
+.measure-form{border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;background:#fbfdfc;display:grid;gap:8px}
+.measure-form h4,.follow-title{margin:0;font-size:14px;color:#1f705d}
+.measure-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 12px}
+.measure-grid .wide{grid-column:1/-1}
+.follow-table td small{display:block;color:#82948e;font-size:11px}
+.follow-table tr.base td{background:#f2f8f5}
+.follow-table tr.previous td{color:#82948e}
+.follow-table td.notes{max-width:220px;white-space:pre-wrap}
+.row-actions{display:flex;gap:6px}
+.row-actions .danger{padding:7px 10px;font-size:12px}
+@media(max-width:860px){.follow-charts{grid-template-columns:1fr}.follow-summary{grid-template-columns:1fr 1fr}.measure-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.measure-grid{grid-template-columns:1fr}}
+
+/* Seguimiento clínico por hitos */
+.form-buttons.start{justify-content:flex-start;margin-top:0}
+.current-state{border:1px solid #e1ece7;border-radius:10px;padding:12px 14px;background:#fbfdfc}
+.current-state h4{margin:0 0 8px;font-size:14px;color:#1f705d}
+.current-state dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0;font-size:12px}
+.current-state dt{color:#6c837b;font-weight:bold}
+.current-state dd{margin:0;color:#35564f}
+.current-state dd small{display:block;color:#82948e;font-size:10px}
+.current-state .hint{display:block;margin-top:8px;color:#82948e;font-size:11px}
+.milestone-form .ms-state,.milestone-form .ms-visit{display:grid;gap:8px}
+.milestone-form h5{margin:6px 0 0;font-size:13px;color:#173d36}
+.milestone-form .hint{margin:0;color:#6c837b;font-size:12px}
+.change-count{font-weight:normal;color:#9a651c;font-size:12px;margin-left:6px}
+.ms-section{border:1px solid #e1ece7;border-radius:9px;background:#fff}
+.ms-section summary{cursor:pointer;padding:10px 12px;font-weight:bold;font-size:12px;color:#1f705d}
+.ms-section .field-grid{padding:4px 12px 12px}
+.ms-count{color:#9a651c;font-weight:normal}
+.milestone-form fieldset.ms-measures{margin:0}
+.ms-state .field.changed{background:#fff6e8;border-radius:8px;box-shadow:0 0 0 2px #f0d49c;padding:6px}
+.milestones{display:grid;gap:10px}
+.milestone{border:1px solid #e1ece7;border-left:4px solid #0f8a6a;border-radius:9px;padding:10px 14px;background:#fff;font-size:12px;color:#35564f}
+.milestone.base{border-left-color:#a9bdb6;background:#f6faf8}
+.milestone header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.milestone header b{font-size:13px;color:#173d36}
+.milestone header small{display:block;color:#82948e;font-size:11px;margin-top:2px}
+.milestone p{margin:6px 0 0;line-height:1.45}
+.milestone .ms-line{color:#173d36;font-weight:bold}
+.ms-changes{margin-top:8px;background:#fffaf0;border:1px solid #f0dfb8;border-radius:8px;padding:8px 10px}
+.ms-changes h5{margin:0 0 4px;font-size:12px;color:#8a5a14}
+.ms-changes ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.ms-changes .before{color:#82948e;text-decoration:line-through}
+.ms-changes .after{color:#173d36;font-weight:bold}
+.ms-record{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0 0}
+.ms-record dt{color:#6c837b;font-weight:bold}
+.ms-record dd{margin:0;white-space:pre-wrap}
+.measure-table summary{cursor:pointer;font-size:12px;font-weight:bold;color:#1f705d}
+@media(max-width:720px){.current-state dl,.ms-record{grid-template-columns:1fr}}
+.milestone header{height:auto;padding:0;border:0;background:none;color:inherit;font-size:inherit}
+.ms-changes .removed-item{color:#a2482f;font-weight:bold}

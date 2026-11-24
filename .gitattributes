@@ -1,0 +1,5 @@
+# Fin de línea LF en el repositorio para que Windows y macOS vean los mismos archivos.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.zip binary

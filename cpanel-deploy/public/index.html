@@ -2,14 +2,28 @@
 <html lang="es">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NutriPediátrica</title><link rel="stylesheet" href="nutri.css"></head>
 <body>
-  <aside><div class="brand"><span>✦</span> nutri<i>pediátrica</i></div><div class="profile"><b>María Soto</b><small>Nutricionista</small></div><nav><a class="active" id="navHome" href="#inicio">▦ Inicio</a><a id="navPatients" href="#pacientes">♙ Pacientes</a></nav><footer>◌ Soporte clínico<small>Ficha y pautas nutricionales</small></footer></aside>
-  <main><header><span>Inicio / <b>Pacientes</b></span><span>◌ <b>MS</b></span></header><section class="content" id="inicio">
+  <aside><div class="brand"><span>✦</span> nutri<i>pediátrica</i></div><div class="profile"><b>María Soto</b><small>Nutricionista</small></div><nav><a class="active" id="navHome" href="#inicio">▦ Inicio</a><a id="navPatients" href="#pacientes">♙ Pacientes</a><a id="navFoods" href="#alimentos">◍ Base de alimentos</a></nav><footer>◌ Soporte clínico<small>Ficha y pautas nutricionales</small></footer></aside>
+  <main><header><span id="breadcrumb">Inicio / <b>Pacientes</b></span><span>◌ <b>MS</b></span></header><section class="content" id="inicio">
     <div class="welcome"><div><p>Gestión clínica pediátrica</p><h1>Pacientes y pautas nutricionales.</h1><small>Crea una ficha, registra la evaluación y genera una pauta para revisión profesional.</small></div><button id="newPatient">＋ Nueva ficha</button></div>
     <div class="clinical-summary"><span><b id="patientCount">—</b> fichas clínicas registradas</span><button class="plain" id="refresh">Actualizar lista</button><span id="mode" hidden></span></div>
     <section class="panel" id="pacientes"><div class="title"><div><small>FICHAS CLÍNICAS</small><h2>Pacientes</h2><p>Consulta antecedentes, actualiza la evaluación y prepara la pauta nutricional de cada paciente.</p></div></div><div id="patients" class="patients">Cargando pacientes…</div></section>
     <section class="panel plan-preview" id="planPreview" hidden></section>
     <p class="note">Las pautas nutricionales deben ser revisadas y aprobadas por la profesional responsable antes de entregarlas.</p>
+  </section>
+  <section class="content" id="alimentos" hidden>
+    <div class="welcome"><div><p>Base de alimentos</p><h1>Alimentos, porciones y reglas.</h1><small>Catálogo para la pauta por porciones de intercambio. Nutrientes de USDA FoodData Central (SR Legacy, dominio público); revisa y ajusta cada dato.</small></div><button id="addFood">＋ Agregar alimento</button></div>
+    <div class="tabs" role="tablist"><button type="button" role="tab" data-tab="groups" class="active">Grupos de intercambio</button><button type="button" role="tab" data-tab="foods">Alimentos</button><button type="button" role="tab" data-tab="rules">Reglas por edad</button></div>
+    <section class="panel" id="catalogPanel">Cargando base de alimentos…</section>
+    <p class="note">Los valores de referencia y las reglas de porciones deben ser validados por la profesional responsable.</p>
   </section></main>
   <dialog id="modal"><form method="dialog" id="patientForm"><input type="hidden" name="patient_id"><button class="close" type="button" aria-label="Cerrar ficha">×</button><small id="formEyebrow">NUEVA FICHA</small><h2>Evaluación médico-nutricional pediátrica</h2><p class="form-intro">Completa los antecedentes de la entrevista inicial. Los campos con varias alternativas permiten más de una selección.</p><div id="intakeSections"></div><button class="save">Guardar ficha clínica</button><p id="formMessage"></p></form></dialog>
+  <dialog id="planModal" class="plan-modal" aria-label="Planes de alimentación"><div id="planBody"></div></dialog>
+  <dialog id="followModal" class="plan-modal" aria-label="Seguimiento"><div id="followBody"></div></dialog>
+  <dialog id="foodModal" aria-label="Alimento"><div id="foodBody"></div></dialog>
+  <datalist id="foodSuggestions"></datalist>
+  <script src="requirements.js"></script>
   <script src="nutri.js"></script>
+  <script src="plans.js"></script>
+  <script src="catalog.js"></script>
+  <script src="followup.js"></script>
 </body></html>
